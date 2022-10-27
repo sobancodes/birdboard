@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Project;
-use Database\Factories\ProjectFactory;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -15,8 +15,7 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_user_can_create_project()
     {
-
-        $this->withoutExceptionHandling();
+        $this->actingAs(User::factory()->create());
 
         $attributes = [
             'title' => $this->faker->sentence(),
@@ -33,7 +32,7 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_user_can_view_a_project()
     {
-        $this->withoutExceptionHandling();
+        $this->actingAs(User::factory()->create());
 
         $project = Project::factory()->create();
 
@@ -46,16 +45,30 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_a_title()
     {
+        $this->actingAs(User::factory()->create());
+
         $attributes = Project::factory()->raw(['title' => '']);
+
         $this->post('/projects', $attributes)->assertSessionHasErrors('title');
     }
 
     // need to validate that we are throwing a description error if description is missing
     /** @test */
-    public function a_project_requires_a_description()
+    public function a_project_requires_a_descrition()
     {
+        $this->actingAs(User::factory()->create());
+
         $attributes = Project::factory()->raw(['description' => '']);
 
         $this->post('/projects', $attributes)->assertSessionHasErrors('description');
+    }
+
+    // need to validate that we are throwing a description error if description is missing
+    /** @test */
+    public function a_project_requires_an_owner()
+    {
+        $attributes = Project::factory()->raw();
+
+        $this->post('/projects', $attributes)->assertRedirect('/login');
     }
 }

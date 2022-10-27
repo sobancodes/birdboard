@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ProjectsController;
-use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,9 +18,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-Route::controller(ProjectsController::class)->group(function() {
+require __DIR__.'/auth.php';
+
+Route::controller(ProjectsController::class)->middleware('auth')->group(function() {
     Route::get('/projects', 'index');
-    Route::post('/projects', 'store');
+    Route::post('/projects', 'store')->middleware('auth');
     Route::get('/projects/{project}', 'show');
 });
