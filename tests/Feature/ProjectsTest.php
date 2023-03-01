@@ -12,6 +12,22 @@ class ProjectsTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
+    /**
+     * How does this test work?
+     * This is a middleware level test instead of request validation test
+     * We pass all the data (title, description) in this case
+     * However to access this route / method user should be signed in. So we added a middleware on the route
+     * Here in the test, we don't have the user signed in. So when they try to access the method
+     * we make sure that the redirect exists to the login page.
+     */
+    /** @test */
+    public function a_project_requires_an_owner()
+    {
+        $attributes = Project::factory()->raw();
+
+        $this->post('/projects', $attributes)->assertRedirect('/login');
+    }
+
     /** @test */
     public function a_user_can_create_project()
     {
@@ -61,14 +77,5 @@ class ProjectsTest extends TestCase
         $attributes = Project::factory()->raw(['description' => '']);
 
         $this->post('/projects', $attributes)->assertSessionHasErrors('description');
-    }
-
-    // need to validate that we are throwing a description error if description is missing
-    /** @test */
-    public function a_project_requires_an_owner()
-    {
-        $attributes = Project::factory()->raw();
-
-        $this->post('/projects', $attributes)->assertRedirect('/login');
     }
 }

@@ -9,7 +9,7 @@ class ProjectsController extends Controller
 {
     public function index()
     {
-        $projects = Project::all();
+        $projects = auth()->user()->projects;
 
         return view('projects.index', compact('projects'));
     }
@@ -17,16 +17,21 @@ class ProjectsController extends Controller
     public function store(Request $request)
     {
         $attributes = $request->validate([
-            'title' => 'required', 
+            'title' => 'required',
             'description' => 'required',
         ]);
 
-        auth()->user()->projects()->create($attributes);
+        /**
+         * @var \App\Models\User
+         */
+        $user = auth()->user();
+        $user->projects()->create($attributes);
 
         return redirect('/projects');
     }
 
-    public function show(Project $project) {
+    public function show(Project $project)
+    {
         return view('projects.show', compact('project'));
     }
 }

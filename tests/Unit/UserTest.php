@@ -17,12 +17,13 @@ class UserTest extends TestCase
     {
         $this->assertTrue(true);
     }
-    
+
     /** @test */
-    public function has_projects() {
+    public function has_projects()
+    {
         $user = User::factory()->create();
-        
-        // checking that if we call the relationship method then it returns the projects
+
+        // checking that if we call the relationship method then it returns the collection of projects
         // if the relationship does not exists then null will be returned
         $this->assertInstanceOf(EloquentCollection::class, $user->projects);
     }
