@@ -9,7 +9,13 @@ class Project extends Model
 {
     use HasFactory;
 
-    public function path() {
+    public function path()
+    {
         return '/projects/' . $this->id;
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
     }
 }

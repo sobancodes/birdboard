@@ -46,11 +46,11 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_view_a_project()
+    public function a_user_can_view_their_project()
     {
         $this->actingAs(User::factory()->create());
 
-        $project = Project::factory()->create();
+        $project = Project::factory()->create(['owner_id' => auth()->user()->id]);
 
         $this->get($project->path())
             ->assertSee($project->title)
@@ -77,5 +77,37 @@ class ProjectsTest extends TestCase
         $attributes = Project::factory()->raw(['description' => '']);
 
         $this->post('/projects', $attributes)->assertSessionHasErrors('description');
+    }
+
+    /** @test */
+    public function guest_cannot_create_projects()
+    {
+        $project = Project::factory()->raw();
+
+        $this->post('/projects', $project)->assertRedirect('login');
+    }
+
+    /** @test */
+    public function guest_cannot_view_projects()
+    {
+        $this->get('/projects')->assertRedirect('login');
+    }
+
+    /** @test */
+    public function guest_cannot_view_a_project()
+    {
+        $project = Project::factory()->create();
+
+        $this->get($project->path())->assertRedirect('login');
+    }
+
+    /** @test */
+    public function an_authenticated_user_cannot_view_projects_of_others()
+    {
+        $this->actingAs(User::factory()->create());
+
+        $project = Project::factory()->create();
+
+        $this->get($project->path())->assertStatus(403);
     }
 }
