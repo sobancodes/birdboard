@@ -1,10 +1,54 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{$project->title}}
-        </h2>
+        <div class="flex items-end justify-between">
+            <p class="text-base font-normal leading-tight text-gray-400">
+                <a href="/projects">{{ __('My Projects') }}</a> / {{ $project->title }}
+            </p>
+
+            <a href="{{ route('projects.create') }}" type="submit" class="button">
+                {{ __('New Project') }}
+            </a>
+        </div>
     </x-slot>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5">
-        <p>{{ $project->description }}</p>
-    </div>
+
+    <main class="px-4 mx-auto mt-5 max-w-7xl sm:px-6 lg:px-8">
+        <div class="-mx-3 lg:flex">
+            <div class="px-3 mb-4 lg:w-3/4">
+
+                <div class="mb-6 space-y-3">
+
+                    <h2 class="mb-3 text-lg font-normal leading-tight text-gray-400">
+                        {{ __('Tasks') }}
+                    </h2>
+
+                    <div class="card">
+                        Lorem ipsum
+                    </div>
+
+                    <div class="card">
+                        Lorem ipsum
+                    </div>
+
+                    <div class="card">
+                        Lorem ipsum
+                    </div>
+
+                    <div class="card">
+                        Lorem ipsum
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="mb-3 text-lg font-normal leading-tight text-gray-400">
+                        {{ __('General Notes') }}
+                    </h2>
+
+                    <textarea class="w-full h-[200px] border-none rounded-md">Lorem ipsum</textarea>
+                </div>
+            </div>
+            <div class="px-3 lg:w-1/4">
+                @include('projects.card')
+            </div>
+        </div>
+    </main>
 </x-app-layout>
