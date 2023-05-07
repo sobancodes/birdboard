@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProjectsController;
+use App\Http\Controllers\ProjectTaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,4 +30,8 @@ Route::controller(ProjectsController::class)->prefix('projects')->name('projects
     Route::get('create', 'create')->name('create');
     Route::post('', 'store')->name('store');
     Route::get('{project}', 'show')->name('show');
+});
+
+Route::controller(ProjectTaskController::class)->prefix('projects')->name('projects.')->middleware('auth')->group(function () {
+    Route::post('{project}/tasks', 'store');
 });
