@@ -33,6 +33,19 @@ class ProjectTasksTest extends TestCase
         $this->assertDatabaseMissing('tasks', ['body' => 'Test task']);
     }
 
+    /** @test */
+    public function a_user_cannot_add_task_they_do_not_own()
+    {
+        $this->signIn();
+
+        $project = Project::factory()->create();
+        $task = $project->addTask('test task');
+
+        $this->patch($task->path(), ['body' => 'changed'])->assertStatus(403);
+
+        $this->assertDatabaseMissing('tasks', ['body' => 'changed']);
+    }
+
     // if you are struggling to write tests, assume yourself as a client requesting some new feature
     // & you have to explain yourself to developer
     // in this case i could say that i want a feature that the project has tasks
@@ -58,5 +71,26 @@ class ProjectTasksTest extends TestCase
         $attributes = Task::factory()->raw(['body' => '']);
 
         $this->post($project->path() . '/tasks', $attributes)->assertSessionHasErrors('body');
+    }
+
+    /** @test */
+    public function a_task_can_be_updated()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signIn();
+
+        $project = Project::factory()->create(['owner_id' => auth()->id()]);
+
+        $task = $project->addTask('test task');
+
+        $attributes = [
+            'body' => 'changed',
+            'completed' => true,
+        ];
+
+        $this->patch($task->path(), $attributes);
+
+        $this->assertDatabaseHas('tasks', $attributes);
     }
 }

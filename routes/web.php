@@ -34,4 +34,5 @@ Route::controller(ProjectsController::class)->prefix('projects')->name('projects
 
 Route::controller(ProjectTaskController::class)->prefix('projects')->name('projects.')->middleware('auth')->group(function () {
     Route::post('{project}/tasks', 'store');
+    Route::patch('{project}/tasks/{task}', 'update');
 });
