@@ -30,6 +30,7 @@ Route::controller(ProjectsController::class)->prefix('projects')->name('projects
     Route::get('create', 'create')->name('create');
     Route::post('', 'store')->name('store');
     Route::get('{project}', 'show')->name('show');
+    Route::patch('{project}', 'update')->name('update');
 });
 
 Route::controller(ProjectTaskController::class)->prefix('projects')->name('projects.')->middleware('auth')->group(function () {

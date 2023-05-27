@@ -26,8 +26,10 @@
                                 @csrf
                                 @method('PATCH')
                                 <div class="flex items-center ">
-                                    <input class="w-full outline-none {{ $task->completed ? 'text-gray-400' : '' }}" name="body" value="{{ $task->body }}" />
-                                    <input class="border-gray-400 rounded-sm" name="completed" type="checkbox" onchange="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
+                                    <input class="w-full outline-none {{ $task->completed ? 'text-gray-400' : '' }}"
+                                        name="body" value="{{ $task->body }}" />
+                                    <input class="border-gray-400 rounded-sm" name="completed" type="checkbox"
+                                        onchange="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
                                 </div>
                             </form>
                         </div>
@@ -44,8 +46,13 @@
                     <h2 class="mb-3 text-lg font-normal leading-tight text-gray-400">
                         {{ __('General Notes') }}
                     </h2>
-
-                    <textarea class="w-full h-[200px] border-none rounded-md">Lorem ipsum</textarea>
+                    <form method="POST" action="{{ $project->path() }}">
+                        @method('PATCH')
+                        @csrf
+                        <textarea class="w-full h-[200px] border-none rounded-md" name="notes"
+                            placeholder="{{ __('Anything special you\'d like to make a note of?') }}">{{ $project->notes }}</textarea>
+                        <button type="submit" class="mt-2 button">{{ __('Update') }}</button>
+                    </form>
                 </div>
             </div>
             <div class="px-3 lg:w-1/4">

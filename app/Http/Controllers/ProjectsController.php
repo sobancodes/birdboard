@@ -24,6 +24,7 @@ class ProjectsController extends Controller
         $attributes = $request->validate([
             'title' => 'required',
             'description' => 'required',
+            'notes' => 'max:255',
         ]);
 
         /**
@@ -37,12 +38,17 @@ class ProjectsController extends Controller
 
     public function show(Project $project)
     {
-        /** @var User::class */
-        $user = auth()->user();
-        if ($user->isNot($project->owner)) {
-            abort(403);
-        }
+        $this->authorize('update', $project);
 
         return view('projects.show', compact('project'));
+    }
+
+    public function update(Request $request, Project $project)
+    {
+        $this->authorize('update', $project);
+
+        $project->update(request(['notes']));
+
+        return redirect($project->path());
     }
 }
