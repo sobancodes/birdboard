@@ -69,6 +69,17 @@ class ManageProjectsTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_update_a_note_field() {
+        $project = ProjectSetup::owner($this->signIn())->create();
+
+        $attributes = ['notes' => 'changed'];
+
+        $this->patch($project->path(), $attributes);
+
+        $this->assertDatabaseHas('projects', $attributes);
+    }
+
+    /** @test */
     public function a_user_can_view_their_project()
     {
         $project = ProjectSetup::owner($this->signIn())->create();

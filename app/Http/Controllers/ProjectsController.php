@@ -55,8 +55,8 @@ class ProjectsController extends Controller
     protected function validateRequest($request)
     {
         return $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+            'title' => 'sometimes|required',
+            'description' => 'sometimes|required',
             'notes' => 'max:255',
         ]);
     }
