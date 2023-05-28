@@ -74,11 +74,58 @@ class ProjectTasksTest extends TestCase
 
         $attributes = [
             'body' => 'changed',
+        ];
+
+        $this->patch($project->tasks[0]->path(), $attributes);
+
+        $this->assertDatabaseHas('tasks', $attributes);
+    }
+
+    /** @test */
+    public function a_task_can_be_completed()
+    {
+        $project = ProjectSetup::owner($this->signIn())->withTasks(1)->create();
+
+        $attributes = [
+            'body' => 'changed',
             'completed' => true,
         ];
 
         $this->patch($project->tasks[0]->path(), $attributes);
 
         $this->assertDatabaseHas('tasks', $attributes);
+    }
+
+    /** @test */
+    public function a_task_can_be_marked_as_incompleted()
+    {
+        $project = ProjectSetup::owner($this->signIn())->withTasks(1)->create();
+
+        $attributes = [
+            'body' => 'changed',
+            'completed' => true,
+        ];
+
+        $this->patch($project->tasks[0]->path(), $attributes);
+
+        $attributes = [
+            'body' => 'changed',
+            'completed' => false,
+        ];
+
+        $this->patch($project->tasks[0]->path(), $attributes);
+
+        $this->assertDatabaseHas('tasks', $attributes);
+    }
+
+    public function a_task_can_be_deleted()
+    {
+        $project = ProjectSetup::withTasks(1)->owner($this->signIn())->create();
+
+        $task = $project->tasks[0];
+
+        $this->delete($task->path())->assertRedirect($project->path());
+
+        $this->assertDatabaseMissing('tasks', $task->raw());
     }
 }
