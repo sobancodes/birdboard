@@ -5,8 +5,8 @@
                 <a href="/projects">{{ __('My Projects') }}</a> / {{ $project->title }}
             </p>
 
-            <a href="{{ route('projects.create') }}" type="submit" class="button">
-                {{ __('New Project') }}
+            <a href="{{ $project->path() . '/edit' }}" type="submit" class="button">
+                {{ __('Edit Project') }}
             </a>
         </div>
     </x-slot>

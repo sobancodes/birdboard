@@ -30,6 +30,7 @@ Route::controller(ProjectsController::class)->prefix('projects')->name('projects
     Route::get('create', 'create')->name('create');
     Route::post('', 'store')->name('store');
     Route::get('{project}', 'show')->name('show');
+    Route::get('{project}/edit', 'edit')->name('edit');
     Route::patch('{project}', 'update')->name('update');
 });
 
