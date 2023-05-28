@@ -14,7 +14,6 @@
     <main class="px-4 mx-auto mt-5 max-w-7xl sm:px-6 lg:px-8">
         <div class="-mx-3 lg:flex">
             <div class="px-3 mb-4 lg:w-3/4">
-
                 <div class="mb-6 space-y-3">
                     <h2 class="mb-3 text-lg font-normal leading-tight text-gray-400">
                         {{ __('Tasks') }}
@@ -55,8 +54,10 @@
                     </form>
                 </div>
             </div>
-            <div class="px-3 lg:w-1/4">
+            <div class="px-3 lg:w-1/4 lg:py-8">
                 @include('projects.card')
+
+                @include('projects.activity.card')
             </div>
         </div>
     </main>
