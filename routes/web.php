@@ -25,16 +25,11 @@ Route::get('/dashboard', function () {
 
 require __DIR__ . '/auth.php';
 
-Route::controller(ProjectsController::class)->prefix('projects')->name('projects.')->middleware('auth')->group(function () {
-    Route::get('', 'index')->name('index');
-    Route::get('create', 'create')->name('create');
-    Route::post('', 'store')->name('store');
-    Route::get('{project}', 'show')->name('show');
-    Route::get('{project}/edit', 'edit')->name('edit');
-    Route::patch('{project}', 'update')->name('update');
-});
+Route::middleware('auth')->group(function () {
+    Route::resource('projects', ProjectsController::class);
 
-Route::controller(ProjectTaskController::class)->prefix('projects')->name('projects.')->middleware('auth')->group(function () {
-    Route::post('{project}/tasks', 'store');
-    Route::patch('{project}/tasks/{task}', 'update');
+    Route::controller(ProjectTaskController::class)->prefix('projects')->name('projects.')->middleware('auth')->group(function () {
+        Route::post('{project}/tasks', 'store');
+        Route::patch('{project}/tasks/{task}', 'update');
+    });
 });

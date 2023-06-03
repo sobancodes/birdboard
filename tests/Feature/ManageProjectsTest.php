@@ -55,10 +55,36 @@ class ManageProjectsTest extends TestCase
     }
 
     /** @test */
+    public function unauthorized_users_may_not_delete_projects()
+    {
+        $project = ProjectSetup::create();
+
+        $this->delete($project->path())->assertRedirect('/login');
+
+        $this->signIn();
+
+        $this->delete($project->path())->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_user_can_delete_a_project()
+    {
+        // what do i want
+        // give that there is a project associated with the user
+        $project = ProjectSetup::owner($this->signIn())->create();
+        // i should be able to delete the project by its id
+        $this->delete($project->path())->assertRedirect('/projects');
+        // and it should be missing from database afterwards
+        $this->assertDatabaseMissing('projects', $project->only('id'));
+
+        $this->get($project->path())->assertNotFound();
+    }
+
+    /** @test */
     public function a_user_can_update_a_project()
     {
         $this->withoutExceptionHandling();
-        
+
         $project = ProjectSetup::owner($this->signIn())->create();
 
         $this->patch($project->path(), $attributes = [
@@ -71,7 +97,8 @@ class ManageProjectsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_update_a_note_field() {
+    public function a_user_can_update_a_note_field()
+    {
         $project = ProjectSetup::owner($this->signIn())->create();
 
         $attributes = ['notes' => 'changed'];

@@ -14,7 +14,7 @@ trait RecordsActivity
         if (property_exists(get_called_class(), 'recordableEvents')) {
             $recordableEvents = (new self)->recordableEvents;
         } else {
-            $recordableEvents = ['created', 'updated', 'deleted'];
+            $recordableEvents = ['created', 'updated'];
         }
 
         foreach ($recordableEvents as $event) {
