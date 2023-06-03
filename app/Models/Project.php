@@ -6,12 +6,11 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use App\Traits\RecordsActivity;
 
 class Project extends Model
 {
-    use HasFactory;
-
-    public $old = [];
+    use HasFactory, RecordsActivity;
 
     /**
      * Prepare a date for array / JSON serialization.
@@ -47,26 +46,5 @@ class Project extends Model
     public function activity()
     {
         return $this->hasMany(Activity::class)->latest();
-    }
-
-    public function recordActivity($description)
-    {
-        $this->activity()->create([
-            'description' => $description,
-            'changes' => $this->trackedChanges($description),
-        ]);
-    }
-
-    protected function trackedChanges($description)
-    {
-        $old = Arr::except($this->old, ['created_at', 'updated_at']);
-        $current = Arr::except($this->getAttributes(), ['created_at', 'updated_at']);
-
-        if ($description == 'updated') {
-            return [
-                'before' => array_diff($old, $current),
-                'after' => array_diff($current, $old),
-            ];
-        }
     }
 }
