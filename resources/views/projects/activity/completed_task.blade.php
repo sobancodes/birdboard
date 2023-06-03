@@ -1,1 +1,1 @@
-{{ __("You completed {$activity->subject->body}") }}
+{{ __("{$activity->user->name} completed {$activity->subject->body}") }}

@@ -1,1 +1,1 @@
-{{ __("You created {$activity->subject->body}") }}
+{{ __("{$activity->user->name} created {$activity->subject->body}") }}

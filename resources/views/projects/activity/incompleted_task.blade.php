@@ -1,1 +1,1 @@
-{{ __("You incompleted {$activity->subject->body}") }}
+{{ __("{$activity->user->name} incompleted {$activity->subject->body}") }}

@@ -1,1 +1,1 @@
-{{ __('You created the project') }}
+{{ __("{$activity->user->name} created the project") }}
