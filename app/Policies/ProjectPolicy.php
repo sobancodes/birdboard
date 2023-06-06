@@ -12,6 +12,6 @@ class ProjectPolicy
 
     public function update(User $user, Project $project)
     {
-        return $user->is($project->owner);
+        return $user->is($project->owner) || in_array($user->id, $project->members->pluck('id')->toArray());
     }
 }
