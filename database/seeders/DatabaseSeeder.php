@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Project;
 use App\Models\User;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -24,8 +25,6 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        User::factory()->has(
-            Project::factory()->count(5)
-        )->count(10)->create();
+        $this->call(UserSeeder::class);
     }
 }
