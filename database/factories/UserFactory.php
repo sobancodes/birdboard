@@ -22,9 +22,14 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        $uniqueCounter = self::$uniqueCounter;
+        // $uniqueCounter = self::$uniqueCounter;
 
-        self::$uniqueCounter = User::count() + 1;
+        // self::$uniqueCounter = User::count() + 1;
+
+        $uniqueCounter = resolve('userCount');
+
+        self::$uniqueCounter = $uniqueCounter + 1;
+
 
         return [
             'name' => fake()->name(),

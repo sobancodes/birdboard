@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use App\Observers\ProjectObserver;
 use App\Observers\TaskObserver;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->app->bind('userCount', function() {
+            return User::count();
+        });
     }
 }

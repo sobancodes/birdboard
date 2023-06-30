@@ -5,10 +5,13 @@ namespace Tests\Unit;
 use App\Models\User;
 use Facades\Tests\Setup\ProjectSetup;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic unit test example.
      *
@@ -39,5 +42,14 @@ class UserTest extends TestCase
         ProjectSetup::owner($john)->create();
 
         $this->assertCount(1, $john->accessibleProjects());
+
+        $sally = User::factory()->create();
+        $nick = User::factory()->create();
+
+        $sallyProject = tap(ProjectSetup::owner($sally)->create())->invite($nick);
+        $this->assertCount(1, $john->accessibleProjects());
+        
+        $sallyProject->invite($john);
+        $this->assertCount(2, $john->accessibleProjects());
     }
 }
