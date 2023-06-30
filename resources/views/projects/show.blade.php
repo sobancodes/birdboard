@@ -5,9 +5,19 @@
                 <a href="/projects">{{ __('My Projects') }}</a> / {{ $project->title }}
             </p>
 
-            <a href="{{ $project->path() . '/edit' }}" type="submit" class="button">
-                {{ __('Edit Project') }}
-            </a>
+            <div class="flex items-center space-x-2">
+                @foreach ($project->members as $member)
+                    <img src="https://gravatar.com/avatar/{{ md5($member->email) }}?s=60" alt="{{ $member->name }}"
+                        class="rounded-full w-8">
+                @endforeach
+                
+                <img src="https://gravatar.com/avatar/{{ md5($project->owner->email) }}?s=60"
+                    alt="{{ $project->owner->name }}" class="rounded-full w-8">
+
+                <a href="{{ $project->path() . '/edit' }}" type="submit" class="button">
+                    {{ __('Edit Project') }}
+                </a>
+            </div>
         </div>
     </x-slot>
 
