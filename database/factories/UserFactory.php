@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
-    private static $uniqueCounter = 1;
+    protected static $uniqueCounter;
 
     protected $model = User::class;
 
@@ -24,7 +24,7 @@ class UserFactory extends Factory
     {
         $uniqueCounter = self::$uniqueCounter;
 
-        self::$uniqueCounter = self::$uniqueCounter + 1;
+        self::$uniqueCounter = User::count() + 1;
 
         return [
             'name' => fake()->name(),

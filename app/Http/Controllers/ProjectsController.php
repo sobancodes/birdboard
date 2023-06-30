@@ -9,8 +9,9 @@ class ProjectsController extends Controller
 {
     public function index()
     {
-        $projects = auth()->user()->projects;
-
+        /** @var User::class */
+        $user = auth()->user();
+        $projects = $user->accessibleProjects();
         return view('projects.index', compact('projects'));
     }
 
@@ -57,7 +58,7 @@ class ProjectsController extends Controller
         $this->authorize('update', $project);
 
         $project->delete();
-        
+
         return redirect('/projects');
     }
 

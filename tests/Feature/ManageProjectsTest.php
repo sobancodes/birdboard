@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Project;
 use App\Models\User;
+use Database\Factories\ProjectFactory;
 use Facades\Tests\Setup\ProjectSetup;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -170,5 +171,20 @@ class ManageProjectsTest extends TestCase
         $project = Project::factory()->create();
 
         $this->patch($project->path())->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_user_can_see_all_projects_they_have_been_invited_to()
+    {
+        $this->withoutExceptionHandling();
+        
+        // there is a user who created the project
+        $project = Project::factory()->create();
+
+        // user invites another user
+        $project->invite($this->signIn());
+
+        // if a member visits their dashboard they should see the title of the project.
+        $this->get('/projects')->assertSee($project->title);
     }
 }
