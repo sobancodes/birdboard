@@ -7,12 +7,14 @@
     </header>
 
     <footer>
-        <form method="POST" action="{{ $project->path() }}" class="text-right">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="text-red-500">
-                {{ __('Delete') }}
-            </button>
-        </form>
+        @can('manage', $project)
+            <form method="POST" action="{{ $project->path() }}" class="text-right">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="text-red-500">
+                    {{ __('Delete') }}
+                </button>
+            </form>
+        @endcan
     </footer>
 </div>

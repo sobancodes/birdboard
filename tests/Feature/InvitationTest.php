@@ -108,4 +108,15 @@ class InvitationTest extends TestCase
             ]
         )->assertStatus(403);
     }
+
+    /** @test */
+    public function a_member_may_not_delete_a_project()
+    {
+        $project = ProjectSetup::create();
+        $this->signIn();
+        $this->delete($project->path())->assertStatus(403);
+        $sally = User::factory()->create();
+        $project->invite($sally);
+        $this->actingAs($sally)->delete($project->path())->assertStatus(403);
+    }
 }
