@@ -56,7 +56,7 @@ class InvitationTest extends TestCase
     }
 
     /** @test */
-    public function a_project_can_invite_a_user() {
+    public function a_project_member_can_create_a_task() {
         $this->withoutExceptionHandling();
         // give i have a project
         $project = ProjectSetup::create();
@@ -66,5 +66,18 @@ class InvitationTest extends TestCase
         $this->post("projects/{$project->id}/tasks", ['body' => 'task body'])->assertRedirect($project->path());
         // database should have the records
         $this->assertDatabaseHas('tasks', ['body' => 'task body']);
+    }
+
+    /** @test */
+    public function a_project_can_invite_a_user() {
+        $project = ProjectSetup::create();
+
+        $this->signIn();
+
+        $this->post($project->path() . '/invite', [
+            'email' => $email = User::factory()->create()->email
+        ]);
+
+        $this->assertContains($email, $project->members);
     }
 }
