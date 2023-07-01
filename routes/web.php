@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProjectInvitationController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\ProjectTaskController;
 use Illuminate\Support\Facades\Route;
@@ -32,4 +33,6 @@ Route::middleware('auth')->group(function () {
         Route::post('{project}/tasks', 'store');
         Route::patch('{project}/tasks/{task}', 'update');
     });
+
+    Route::post('/projects/{project}/invite', [ProjectInvitationController::class, 'store']);
 });

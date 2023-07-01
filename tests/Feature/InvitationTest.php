@@ -56,7 +56,8 @@ class InvitationTest extends TestCase
     }
 
     /** @test */
-    public function a_project_member_can_create_a_task() {
+    public function a_project_member_can_create_a_task()
+    {
         $this->withoutExceptionHandling();
         // give i have a project
         $project = ProjectSetup::create();
@@ -69,15 +70,42 @@ class InvitationTest extends TestCase
     }
 
     /** @test */
-    public function a_project_can_invite_a_user() {
-        $project = ProjectSetup::create();
+    public function a_project_owner_can_invite_a_user()
+    {
+        $this->withoutExceptionHandling();
 
-        $this->signIn();
+        $project = ProjectSetup::owner($this->signIn())->create();
+
+        $user = User::factory()->create();
 
         $this->post($project->path() . '/invite', [
-            'email' => $email = User::factory()->create()->email
+            'email' => $user->email
         ]);
 
-        $this->assertContains($email, $project->members);
+        $this->assertTrue($project->members->contains($user));
+    }
+
+    /** @test */
+    public function non_owners_may_not_invite_users_to_project()
+    {
+        $project = ProjectSetup::create();
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->post(
+            $project->path() . '/invite',
+            [
+                'email' => User::factory()->create()->email,
+            ]
+        )->assertStatus(403);
+
+        $project->invite($user);
+
+        $this->post(
+            $project->path() . '/invite',
+            [
+                'email' => User::factory()->create()->email,
+            ]
+        )->assertStatus(403);
     }
 }

@@ -10,7 +10,7 @@
                     <img src="https://gravatar.com/avatar/{{ md5($member->email) }}?s=60" alt="{{ $member->name }}"
                         class="rounded-full w-8">
                 @endforeach
-                
+
                 <img src="https://gravatar.com/avatar/{{ md5($project->owner->email) }}?s=60"
                     alt="{{ $project->owner->name }}" class="rounded-full w-8">
 
@@ -62,12 +62,17 @@
                             placeholder="{{ __('Anything special you\'d like to make a note of?') }}">{{ $project->notes }}</textarea>
                         <button type="submit" class="mt-2 button">{{ __('Update') }}</button>
                     </form>
+                    @include('projects.errors')
                 </div>
             </div>
             <div class="px-3 lg:w-1/4 lg:py-8">
                 @include('projects.card')
 
                 @include('projects.activity.card')
+
+                @can('manage', $project)
+                     @include('projects.invite')
+                @endcan
             </div>
         </div>
     </main>
